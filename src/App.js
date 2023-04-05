@@ -1,37 +1,35 @@
 import { useState } from 'react';
+
 import moviesFromJson from "./data/movies.json";
+
 import Header from './components/Header';
 import Main from './components/Main';
 import Footer from './components/Footer';
 
 import './App.css';
+import AddMovie from './components/AddMovie';
 
 function App() {
 
   const [moviesArr, setMoviesArr] = useState(moviesFromJson);
 
-const [title , setTitle]=useState("");
+  const deleteMovie = (movieTitle) => {
+    const newList = moviesArr.filter( movieDetails => movieDetails.title !== movieTitle );
+    setMoviesArr(newList);
+  }
 
-
-
-
-const handleSubmit = (event) => {
-
- event.preventDefault();
-}
+  const addMovie = (newMovie) => {
+    setMoviesArr( (prevMoviesArr) => {
+      const newList = [newMovie, ...prevMoviesArr];
+      return newList;
+    });
+  }
 
   return (
     <div className="App">
       <Header numberOfMovies={moviesArr.length} />
-
-      <section>
-        <form onSubmit={handleSubmit}>
-          <input type="text" name="title" value={title} onChange={(event) => {setTitle(event.target.value)}} />
-          <button>Create</button>
-        </form>
-      </section>
-
-      <Main moviesArr={moviesArr} setMoviesArr={setMoviesArr} />
+      <AddMovie callbackToAdd={addMovie} />
+      <Main moviesArr={moviesArr} callbackToDelete={deleteMovie} />
       <Footer />
     </div>
   );
