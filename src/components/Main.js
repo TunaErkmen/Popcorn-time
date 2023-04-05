@@ -1,13 +1,29 @@
-import { useState } from "react";
-import moviesFromJson from "../data/movies.json";
+import Movie from "./Movie";
 
 import "./Main.css";
 
-function Main() {
-  const [moviesArr, setMoviesArr] = useState(moviesFromJson);
+function Main(props) {
+
+
+
+
+  const sortByRatingAscending = () => {
+    const sortedMovies = [...props.moviesArr].sort(
+      (a, b) => a.rating - b.rating
+    );
+    props.setMoviesArr(sortedMovies);
+  };
+
+  const sortByRatingDescending = () => {
+    const sortedMovies = [...props.moviesArr].sort(
+      (a, b) => b.rating - a.rating
+    );
+    props.setMoviesArr(sortedMovies);
+  };
+
 
   const deleteMovie = (movieId) => {
-    const filteredMovies = moviesArr.filter((movieObj) => {
+    const filteredMovies = props.moviesArr.filter((movieObj) => {
       return movieObj.id !== movieId;
       // const filteredMovies = moviesArr.filter( movieDetails => movieDetails.id !== movieId );
     });
@@ -20,42 +36,22 @@ function Main() {
     //             return true;
     //         }
     //     });
-    setMoviesArr(filteredMovies);
+    props.setMoviesArr(filteredMovies);
   };
 
-  let title;
-  if (moviesArr.length > 1) {
-    title = <h1>We have {moviesArr.length} movies</h1>;
-  } else if (moviesArr.length === 1) {
-    title = <h1>We have 1 movie</h1>;
-  } else {
-    title = <h1>Sorry, no movies to display</h1>;
-  }
 
   return (
     <div className="Main">
-      {title}
-      {moviesArr.map((movieObj) => {
+   
+
+      <button onClick={sortByRatingAscending}>Order by rating ascending</button>
+        <button onClick={sortByRatingDescending} >Order by rating descending</button>
+
+      {props.moviesArr.map((movieObj) => {
         return (
-          <div key={movieObj.id} className="card">
-            <h2>{movieObj.title}</h2>
-            {movieObj.imgURL 
-             ? <img src={movieObj.imgURL} alt={movieObj.title} /> 
-          : <img src="https://dummyimage.com/182x268/aaaaaa/000000" />
-            }
-
-            <h3>Rating: {movieObj.rating}</h3>
-            <h3>Year: {movieObj.year}</h3>
-
-            {movieObj.rating > 8 && <p className="badge">RECOMMENDED</p>}
-
-            <button
-              onClick={() => deleteMovie(movieObj.id)}
-              className="btn-delete"
-            >
-              Delete
-            </button>
-          </div>
+          <Movie key={movieObj.id}
+           movieDetails={movieObj} 
+           delete={deleteMovie} />
         );
       })}
     </div>
