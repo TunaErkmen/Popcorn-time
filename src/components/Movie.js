@@ -6,7 +6,7 @@ function Movie(props) {
 
           {props.movieDetails.imgURL
               ? <img src={props.movieDetails.imgURL} alt={props.movieDetails.title} />
-              : <img src="https://dummyimage.com/182x268/aaaaaa/000000" />
+              : <img src="https://dummyimage.com/182x268/aaaaaa/000000"/>
           }
 
           <h3>Rating: {props.movieDetails.rating}</h3>
